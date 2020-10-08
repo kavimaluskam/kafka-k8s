@@ -1,0 +1,4 @@
+.idea/*
+charts/kafka-broker/requirements.lock
+charts/*/charts
+charts/*/requirements.lock

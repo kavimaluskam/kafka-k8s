@@ -62,8 +62,9 @@ services:
     ports:
       - "8081:8081"
     environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
   connect:
     image: confluentinc/cp-kafka-connect:5.5.1
@@ -104,34 +105,59 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
 
-  kafdrop:
-    container_name: kafdrop
-    hostname: kafdrop
-    image: obsidiandynamics/kafdrop
+  kafka-rest:
+    container_name: kafka-rest
+    hostname: kafka-rest
+    image: confluentinc/cp-kafka-rest:5.5.1
     ports:
-      - "7999:9000"
+      - "8082:8082"
     environment:
-      KAFKA_BROKERCONNECT: kafka1:9092,kafka2:9092,kafka3:9092
-      JVM_OPTS: "-Xms32M -Xmx64M"
-      SERVER_SERVLET_CONTEXTPATH: "/"
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://schema-registry:8081/
+      KAFKA_REST_HOST_NAME: kafka-rest
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
+    depends_on:
+      - zookeeper
+      - kafka1
+      - kafka2
+      - kafka3
+      - schema-registry
+
+  kafka-topics-ui:
+    container_name: kafka-topics-ui
+    hostname: kafka-topics-ui
+    image: landoop/kafka-topics-ui:0.9.4
+    ports:
+      - "8000:8000"
+    environment:
+      KAFKA_REST_PROXY_URL: "http://kafka-rest:8082/"
+      PROXY: "true"
+    depends_on:
+      - kafka-rest
 
   kafka-connect-ui:
     container_name: kafka-connect-ui
     hostname: kafka-connect-ui
     image: landoop/kafka-connect-ui
+    depends_on:
+      - connect
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       CONNECT_URL: http://connect:8083
+      PROXY: "true"
 
   schema-registry-ui:
     container_name: schema-registry-ui
     hostname: schema-registry-ui
-    image: landoop/schema-registry-ui
+    image: landoop/schema-registry-ui:0.9.5
+    depends_on:
+      - schema-registry
     ports:
-      - "8001:8000"
+      - "8002:8000"
     environment:
-      SCHEMAREGISTRY_URL: http://localhost:8081
+      SCHEMAREGISTRY_URL: http://schema-registry:8081
+      PROXY: "true"
 
   postgres:
     container_name: postgres

@@ -33,6 +33,8 @@ spec:
           env:
             - name: CONNECT_URL
               value: "{{ template "kafka-connect-ui.kafka-connect.service-name" . }}"
+            - name: PROXY
+              value: "true"
           livenessProbe:
             httpGet:
               path: /

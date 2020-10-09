@@ -33,6 +33,8 @@ spec:
           env:
             - name: SCHEMAREGISTRY_URL
               value: "{{ template "schema-registry-ui.schema-registry.service-name" . }}"
+            - name: PROXY
+              value: "true"
           livenessProbe:
             httpGet:
               path: /

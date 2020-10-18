@@ -69,3 +69,10 @@ corresponding kubernetes components:
 | Zookeeper | `charts/zookeeper`| For all-in-one setup |
 
 ### JMX / Prometheus
+
+Confluent Kafka components enable Java Management Extensions (JMX) for monitoring.
+By enabling `${component}.prometheus.jmx.enabled`, components in kubernetes open
+port for exporting application metrics.
+
+One can easily setup Prometheus monitoring in kubernetes with
+[Prometheus Operator](https://github.com/prometheus-community/helm-charts).

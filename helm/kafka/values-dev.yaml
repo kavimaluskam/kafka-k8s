@@ -115,8 +115,8 @@ kafka-connect-ui:
     url: ""
 
 schema-registry-ui:
-  enabled: false
-  # replicaCount: 1
-  # resources: {}
-  # schema-registry:
-  #   url: ""
+  enabled: true
+  replicaCount: 1
+  resources: {}
+  schema-registry:
+    url: ""

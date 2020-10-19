@@ -64,7 +64,7 @@ corresponding kubernetes components:
 | Kafka Connect UI | `charts/kafka-connect-ui` | Minimal UI for kafka-connect |
 | Kafka Rest | `charts/kafka-rest` | Kafka Rest Proxy, good for frontend development ? |
 | Schema Registry | `charts/schema-registry` | Metadata server, good-to-have |
-| Schema Registry UI | `charts/schema-regsitry-ui` | Minimal UI for schema registry, buggy in k8s setup tho |
+| Schema Registry UI | `charts/schema-regsitry-ui` | Minimal UI for schema registry |
 | Brokers   | `charts/kafka-broker` | For all-in-one setup |
 | Zookeeper | `charts/zookeeper`| For all-in-one setup |
 
